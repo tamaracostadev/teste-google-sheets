@@ -1,0 +1,9 @@
+.big {
+  height: 300px;
+}
+
+.hid {
+  visibility: hidden;
+  height: 0px;
+  position: absolute;
+}
