@@ -7,3 +7,11 @@
   height: 0px;
   position: absolute;
 }
+
+.espaco {
+  position: relative;
+  margin-top: 40px;
+}
+.rec {
+  display: block;
+}
