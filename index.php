@@ -2,7 +2,7 @@
 <?php
 ini_set('error_reporting', E_ERROR);
 session_start();
-if (!isset($_SESSION['login'])) {
+if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
   header('location:login.php');
 }
 ?>
@@ -35,14 +35,41 @@ if (!isset($_SESSION['login'])) {
 
 <body>
   <?php
-  if (isset($_POST['check']) && $_POST['check'] == 1) {
+  if (isset($_POST['check']) && ($_POST['check'] == 1 || $_POST['check'] == 3)) {
     include('reclama.php');
+    //echo $insert;
+    if ($insert == 1) { ?>
+      <div class="w3-section w3-col l8 w3-display-topmiddle espaco">
+        <div class="w3-panel w3-green w3-display-container">
+          <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+          <h3>Sucesso</h3>
+          <p>A reclamação foi inserida com sucesso.</p>
+        </div>
+      </div>
+    <?php } elseif (!$ret && !$retorno) { ?>
+      <div class="w3-section w3-col l8 w3-display-topmiddle espaco">
+        <div class="w3-panel w3-red w3-display-container">
+          <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+          <h3>Ops, Ocorreu um erro!</h3>
+          <p>Tente novamente. Caso este erro persista, tire um print da tela e manda pra Tamara.</p>
+        </div>
+      </div>
+    <?php   }
   };
+
   if (isset($_POST['check']) && $_POST['check'] == 2) {
-    echo "<Script>openRec(event, 'consulta');</Script>";
     include('consultar.php');
-  };
-  ?>
+    if (!$ret && !$retorno) {
+    ?>
+      <div class="w3-section w3-col l8 w3-display-topmiddle espaco">
+        <div class="w3-panel w3-light-blue w3-display-container">
+          <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+          <h3>Informação</h3>
+          <p>Não há nenhum retorno para este <?php echo $_POST['consulta']; ?></p>
+        </div>
+      </div>
+  <?php };
+  } ?>
   <div class="w3-card-4 w3-col l6 w3-display-topmiddle espaco">
     <div class="w3-row w3-white">
       <a href="javascript:void(0)" onclick="openRec(event, 'atendimento');">
@@ -53,10 +80,10 @@ if (!isset($_SESSION['login'])) {
       </a>
     </div>
     <!-- TAB RECLAMAÇÃO--->
-    <div id="atendimento" class="rec ">
+    <div id="atendimento" class="rec">
       <div class="w3-container w3-blue-gray">
 
-        <h2>Atendimento Knit </h2>
+        <h2>Atendimento Knit - Nova Reclamação</h2>
       </div>
       <form class="w3-container" method="POST" action="index.php" name="cliform" id="cliform">
         <div class="w3-section">
@@ -86,12 +113,12 @@ if (!isset($_SESSION['login'])) {
             </div>
             <div id="infoRec" class="w3-section hid">
               <label class="w3-text-black" for='nome'><b>Ticket</b></label>
-              <input class="w3-input w3-border " name="ticket" type="number" placeholder="Ticket" required>
+              <input class="w3-input w3-border " name="ticket" id="ticket" type="number" placeholder="Ticket" required>
               <br>
               <label class="w3-text-black" for='nome'><b>Pedido</b></label>
-              <input class="w3-input w3-border " name="pedido" type="number" placeholder="Pedido" required><br>
+              <input class="w3-input w3-border " name="pedido" id="pedido" type="number" placeholder="Pedido" required><br>
               <label class="w3-text-black" for='cpf'><b>CPF</b></label>
-              <input class="w3-input w3-border " name="cpf" type="text" placeholder="CPF" required>
+              <input class="w3-input w3-border " name="cpf" id="cpf" type="text" placeholder="CPF" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" \ title="Digite o CPF no formato: 000.000.000-00 Sem espaços" required>
 
               <div class="w3-section">
                 <label class="w3-text-black"><b>Precisa colocar na planilha?</b></label><br>
@@ -106,7 +133,7 @@ if (!isset($_SESSION['login'])) {
 
             <div id="obsRec" class="w3-section hid">
               <label class="w3-text-black" for=""><b>Ação necessária/ Ação efetuada</b></label>
-              <textarea name="obs" class="w3-input w3-border "></textarea>
+              <textarea name="obs" class="w3-input w3-border " required></textarea>
             </div>
           </div>
           <input class='hid' name="check" value="1">
@@ -151,26 +178,151 @@ if (!isset($_SESSION['login'])) {
   </div>
 
   <!-- modal template -->
-  <!-- <div id="modal" class="w3-modal ">
+  <?php if ($retorno || $ret) { ?>
+    <div id="modal" class="w3-modal " style="display: block;">
       <div class="w3-modal-content w3-animate-zoom ">
         <header class="w3-container w3-blue-gray">
           <span onclick="document.getElementById('modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-          <h2 id="modalH2"></h2>
+          <h2 id="modalH2">Retorno consulta</h2>
         </header>
 
         <div class="w3-container">
-          <textarea name="temptxt" id="temptxt" class="w3-input w3-border big"></textarea>
+          <h2> Retorno Planilha Nova</h2>
+
+          <table class="w3-table-all w3-card-4">
+            <?php
+            //Header retorno plan antiga
+            if (isset($itensNova['retornos']) && $itensNova['retornos'] == 1) { ?>
+              <tr>
+                <?php
+                for ($i = 0; $i < count($itensNova['cabecalhos']); $i++) {
+                  echo '<th>' . $itensNova["cabecalhos"][$i] . '</th>';
+                }
+                ?>
+              </tr>
+              <tr>
+                <?php
+                for ($i = 0; $i < count($itensNova['cabecalhos']); $i++) {
+                  echo '<td>' . $itensNova["values"][0][$i] . '</td>';
+                }
+                ?>
+              </tr>
+            <?php } elseif (isset($itensNova['retornos']) && $itensNova['retornos'] > 1) { ?>
+              <tr>
+                <?php
+                for ($i = 0; $i < count($itensNova['cabecalhos']); $i++) {
+                  echo '<th>' . $itensNova["cabecalhos"][$i] . '</th>';
+                }
+                ?>
+              </tr>
+
+            <?php
+              for ($x = 0; $x < count($itensNova['valueRanges']); $x++) {
+                echo "<tr>";
+                for ($i = 0; $i < count($itensNova['cabecalhos']); $i++) {
+                  echo '<td>' . $itensNova['valueRanges'][$x]['values'][0][$i] . '</td>';
+                }
+                echo "</tr>";
+              }
+            }
+
+            ?>
+          </table>
+          <?php if (!$ret) {
+            echo '<P>Nenhum retorno encontrado na Planilha Nova</P>';
+          } ?>
+          <br>
+
+          <!---Consulta plan Antiga ----->
+          <h2> Retorno Planilha Antiga</h2>
+
+          <table class="w3-table-all w3-card-4">
+            <?php
+            //Header retorno plan antiga
+            if (isset($itensAnt['retornos']) && $itensAnt['retornos'] == 1) { ?>
+              <tr>
+                <?php
+                for ($i = 0; $i < count($itensAnt['cabecalhos']); $i++) {
+                  if ($i !== 5) {
+                    echo '<th>' . $itensAnt["cabecalhos"][$i] . '</th>';
+                  }
+                }
+                ?>
+              </tr>
+              <tr>
+                <?php
+                for ($i = 0; $i < count($itensAnt['cabecalhos']); $i++) {
+                  if ($i !== 5) {
+                    echo '<td>' . $itensAnt["values"][0][$i] . '</td>';
+                  }
+                }
+                ?>
+              </tr>
+            <?php } elseif (isset($itensAnt['retornos']) && $itensAnt['retornos'] > 1) { ?>
+              <tr>
+                <?php
+                for ($i = 0; $i < count($itensAnt['cabecalhos']); $i++) {
+                  if ($i !== 5) {
+                    echo '<th>' . $itensAnt["cabecalhos"][$i] . '</th>';
+                  }
+                }
+                ?>
+              </tr>
+
+            <?php
+              for ($x = 0; $x < count($itensAnt['valueRanges']); $x++) {
+                echo "<tr>";
+                for ($i = 0; $i < count($itensAnt['cabecalhos']); $i++) {
+                  if ($i !== 5) {
+                    echo '<td>' . $itensAnt['valueRanges'][$x]['values'][0][$i] . '</td>';
+                  }
+                }
+                echo "</tr>";
+              }
+            }
+
+            ?>
+          </table>
+          <?php if (!$retorno) {
+            echo '<P>Nenhum retorno encontrado na Planilha Antiga</P>';
+          } ?>
+          <br>
+
+
+
         </div>
 
         <footer class="w3-container w3-blue-gray">
           <div class="w3-margin">
-            <button class="w3-btn w3-white" type="button" id="copia">Copiar</button>
+
+
+
+
+            <form method="POST" action="index.php" name="insereform" id="insereform">
+              <div class="w3-container">
+
+                <?php if (isset($_POST['check']) && $_POST['check'] == 1) { ?>
+                  <input class='hid' name="check" value="3">
+                  <button class="w3-btn w3-white w3-margin-right" type="submit">Inserir na planilha</button>
+                <?php } ?>
+                <button class="w3-btn w3-white" type="button" onclick="document.getElementById('modal').style.display='none'">Fechar</button>
+              </div>
+            </form>
+
+
+
           </div>
         </footer>
       </div>
-    </div> -->
+    </div>
+  <?php }
+  if (isset($_POST['check']) && $_POST['check'] == 2) {
+    echo "<Script>openRec(event, 'consulta');</Script>";
+  };
+
+  ?>
 </body>
-<script src=./js/script.js></script>
+<script src=./js/script.js?vs=4></script>
 
 
 </html>

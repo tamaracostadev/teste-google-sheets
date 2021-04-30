@@ -1,19 +1,30 @@
 let tiporec = {
   Entregas: [
     "Rastreio não funciona",
+    "Pedido não enviado",
     "Retenção fiscal",
-    "Pedido incompleto",
+    "Pedido com itens faltantes",
+    "Pedido com itens errados",
     "Pedido extraviado",
     "Pedido entregue, mas cliente não recebeu",
-    "Correção/Confirmação de endereço",
+    "Pedido entregue no endereço errado",
+    "Correção ou Confirmação de endereço",
     "Outros problemas com a transportadora",
   ],
-  Trocas: ["Erro troque fácil", "Número do pedido", "Defeito", "Envio NF"],
+  Trocas: [
+    "Erro troque fácil",
+    "Número do pedido",
+    "Defeito",
+    "Envio NF",
+    "Alteração antes do envio",
+    "Troca de itens faltantes",
+    "Outros problemas troque fácil",
+  ],
   Financeiro: [
     "Cancelamento antes do envio",
     "Cancelamento (Pedido devolvido)",
     "Problemas com pagamento",
-    "Problemas com estorno",
+    "Problemas com estorno/reembolso",
   ],
 };
 let lista = ["Entregas", "Trocas", "Financeiro", "Outras", "Mkt"];
@@ -52,26 +63,34 @@ function selrec(rec) {
     document.getElementById("infoRec").classList.remove("hid"); // mostra select reclamações
     document.getElementById("obsRec").classList.remove("hid");
     //carrega opções de reclamação
-    console.log(tiporec[lista[rec]]);
 
     populaCombo(
       limpaCombo(document.getElementById("Reclama")),
       tiporec[lista[rec]],
     );
-
-    console.log("é uma reclamação de " + lista[rec]);
     area.value = lista[rec];
+    //Adciona required
+    document.getElementById("ticket").setAttribute("required", "required");
+    document.getElementById("pedido").setAttribute("required", "required");
+    document.getElementById("cpf").setAttribute("required", "required");
   } else if (rec == 3) {
     document.getElementById("selreclama").classList.add("hid");
     document.getElementById("infoRec").classList.remove("hid");
     document.getElementById("obsRec").classList.remove("hid");
-    console.log("Outras reclamações");
     area.value = lista[rec];
+    //Adciona required
+    document.getElementById("ticket").setAttribute("required", "required");
+    document.getElementById("pedido").setAttribute("required", "required");
+    document.getElementById("cpf").setAttribute("required", "required");
   } else {
     document.getElementById("selreclama").classList.add("hid");
     document.getElementById("infoRec").classList.add("hid");
     document.getElementById("obsRec").classList.remove("hid");
-    console.log("Remove mkt");
     area.value = lista[rec];
+
+    //remove required
+    document.getElementById("ticket").removeAttribute("required", "required");
+    document.getElementById("pedido").removeAttribute("required", "required");
+    document.getElementById("cpf").removeAttribute("required", "required");
   }
 }

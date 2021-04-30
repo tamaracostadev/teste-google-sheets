@@ -5,6 +5,7 @@ if (isset($_POST['login'])) {
   $_SESSION['login'] = $_POST['login'];
   $_SESSION['origem'] = $_POST['origem'];
   header('location:index.php');
+  exit;
 }
 ?>
 <html lang='pt-br'>
@@ -30,8 +31,13 @@ if (isset($_POST['login'])) {
       <div class="w3-section">
         <label class="w3-text-blue-gray" for='login'><b>Quem é Você?</b></label>
         <input class="w3-input w3-border " name="login" id="login" type="text" placeholder="Seu nome" required>
-        <label class="w3-text-blue-gray" for='origem'><b>Quem é Você?</b></label>
-        <input class="w3-input w3-border " name="origem" id="origem" type="text" placeholder="Seu nome" required>
+        <label class="w3-text-blue-gray" for='origem'><b>De Qual área você é?</b></label>
+        <select class="w3-select w3-border" name="origem" id="origem">
+          <option value="" disabled selected>Selecione a área</option>
+          <option value="Email">Email</option>
+          <option value="Reclame Aqui">Reclame Aqui</option>
+          <option value="Redes Sociais">Redes Sociais</option>
+        </select>
         <br>
         <button class="w3-btn w3-blue-gray" type="submit" id="btn-ver">Enviar</button>
 
