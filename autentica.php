@@ -3,10 +3,10 @@ require __DIR__ . '/vendor/autoload.php';
 
 class Autentica
 {
-  private $PLAN_NOVA = '10n2MH8XvPFjtRjGiytuqwseyGDTtruHSh7ijlkceiFE';
-  private $PLAN_ANTIGA = '1EJEL5-QDxx3G0cFlesd6hHO0YYQr7Ez6w9FJrRDD91Y';
-  private $MKT = "11WcbSyDe-e6va61vxnvNg-XQBHjYK0HbqIor5kDllu8";
-  private $PLAN_TRANSP = "1xJng89KWlqp2u8amXM2V1oekc_elxwiVjyGar8ePEyY";
+  private $PLAN_NOVA = ''; //id das planilhas
+  private $PLAN_ANTIGA = '';
+  private $MKT = "";
+  private $PLAN_TRANSP = "";
   private $recTransp = ["testeT", "Correção ou Confirmação de endereço", "Pedido entregue, mas cliente não recebeu", "Outros problemas com a transportadora", "Pedido extraviado"];
   private $urgent = ["TesteU", "Cancelamento antes do envio", "Número do pedido", "Envio NF", "Alteração antes do envio", "Troca de itens faltantes"];
   private $tf = ["Testet", "Erro troque fácil", "Outros problemas troque fácil"];
@@ -87,7 +87,7 @@ class Autentica
   {
     $service = new Google_Service_Sheets($auth);
     //última linha da pla atendimento
-    $lin = $service->spreadsheets_values->get($this->PLAN_NOVA, 'atendimentos!K1');
+    $lin = $service->spreadsheets_values->get($this->PLAN_NOVA, 'atendimentos!L1');
     //colocar if para alterar aba/planilha
     if ($this->area == 'Mkt') {
 
@@ -99,7 +99,7 @@ class Autentica
           $this->action
         ],
       ];
-    } elseif ($insere == 0) {
+    } else {
       if ($this->area == 'Outras') {
         $range = $this->area . '!A1:H1';
         $plan = $this->PLAN_NOVA;
@@ -146,6 +146,7 @@ class Autentica
           $area = "Defeito";
         }
 
+
         //Fim Validação urgente ou transp
         $values = [ //Pedido, CPF, Nome, reclamação, obs
           [
@@ -165,11 +166,13 @@ class Autentica
     }
 
     //param aba atendimento
-    $rangeNew = 'atendimentos!A1:J1';
+    $rangeNew = 'atendimentos!A1:K1';
     $act = $this->action;
-
+    if ($insere == 1) {
+      $area = "";
+    }
     $formula = '=Seerro(PROCV(C' . $lin["values"][0][0] . ';INDIRETO(J' . $lin["values"][0][0] . '&"!D:J");7;0);"Não está na planilha")';
-
+    $responsavel = '=Seerro(PROCV(J' . $lin["values"][0][0] . ';AUX!A:B;2;0);"")';
     $valuesNew = [
       [
         date('d/m/Y - H:i'),
@@ -181,7 +184,8 @@ class Autentica
         $act,
         $this->user,
         $formula,
-        $area
+        $area,
+        $responsavel
 
       ],
     ];
@@ -198,16 +202,19 @@ class Autentica
     ]);
 
     try {
-      if ($insere == 0 || $this->area == "Mkt") {
-        $service->spreadsheets_values->append($plan, $range, $body, $params);
-      }
       if ($this->area != "Mkt") {
         $service->spreadsheets_values->append($this->PLAN_NOVA, $rangeNew, $bodyNew, $params);
       }
+      if ($insere != 1 || $this->area == "Mkt") {
+        $service->spreadsheets_values->append($plan, $range, $body, $params);
+      }
+
       return 1;
     } catch (Exception $e) {
+      print_r($insere);
+      echo "<hr>";
       print_r($values);
-      echo "</br>";
+      echo "</br><br>";
       print_r($valuesNew);
       echo "</br>";
       print_r($e->getMessage());
@@ -285,12 +292,12 @@ class Autentica
     for ($i = 0; $i < count($values); $i++) {
       if ($values[$i][0] == $search) {
         $ret[$x] = 2 + $i;
-        $ranges[$x] = "atendimentos!B" . $ret[$x] . ":I" . $ret[$x];
+        $ranges[$x] = "atendimentos!A" . $ret[$x] . ":K" . $ret[$x];
         $x++;
       }
     }
     //RETORNA CABEÇALHO
-    $cabecalho = $service->spreadsheets_values->get($this->PLAN_NOVA, "atendimentos!B1:I1");
+    $cabecalho = $service->spreadsheets_values->get($this->PLAN_NOVA, "atendimentos!A1:K1");
     //Verifica se tem retorno
     if ($x == 1) { // 1 retorno
       $response = $service->spreadsheets_values->get($this->PLAN_NOVA, $ranges[0]);
