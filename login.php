@@ -25,7 +25,7 @@ if (isset($_POST['login'])) {
 
   <div class="w3-card-4 w3-col l4 w3-display-middle">
     <div class="w3-container w3-blue-gray">
-      <h2>Atendimento Knit</h2>
+      <h2>Atendimento</h2>
     </div>
     <form class="w3-container" method="POST" action="login.php" name="login" id="login">
       <div class="w3-section">
@@ -37,6 +37,7 @@ if (isset($_POST['login'])) {
           <option value="Email">Email</option>
           <option value="Reclame Aqui">Reclame Aqui</option>
           <option value="Redes Sociais">Redes Sociais</option>
+          <option value="Redes Sociais">Telefone</option>
         </select>
         <br>
         <button class="w3-btn w3-blue-gray" type="submit" id="btn-ver">Enviar</button>

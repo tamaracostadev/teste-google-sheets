@@ -10,9 +10,9 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
 
 <head>
   <meta charset='utf-8'>
-  <title>Knit Atendimento</title>
+  <title>Atendimento</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel='stylesheet' href='./css/w3.css'>
+  <link rel='stylesheet' href='./css/w3.css?v=1'>
   <link rel='stylesheet' href='./css/style.css'>
   <script>
     document.documentElement.classList.add('js');
@@ -51,7 +51,7 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
         <div class="w3-panel w3-red w3-display-container">
           <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
           <h3>Ops, Ocorreu um erro!</h3>
-          <p>Tente novamente. Caso este erro persista, tire um print da tela e manda pra Tamara.</p>
+
         </div>
       </div>
     <?php   }
@@ -83,7 +83,7 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
     <div id="atendimento" class="rec">
       <div class="w3-container w3-blue-gray">
 
-        <h2>Atendimento Knit - Nova Reclamação</h2>
+        <h2>Nova Reclamação</h2>
       </div>
       <form class="w3-container" method="POST" action="index.php" name="cliform" id="cliform">
         <div class="w3-section">
@@ -148,7 +148,7 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
       <div id="consulta" class="rec" style="display:none">
         <div class="w3-container w3-blue-gray">
 
-          <h2>Atendimento Knit - Consulta retorno</h2>
+          <h2>Atendimento - Consulta retorno</h2>
         </div>
 
         <?php  ?>
@@ -180,7 +180,7 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
   <!-- modal template -->
   <?php if ($retorno || $ret) { ?>
     <div id="modal" class="w3-modal " style="display: block;">
-      <div class="w3-modal-content w3-animate-zoom ">
+      <div class="w3-modal-content w3-animate-zoom">
         <header class="w3-container w3-blue-gray">
           <span onclick="document.getElementById('modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
           <h2 id="modalH2">Retorno consulta</h2>
@@ -191,19 +191,23 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
 
           <table class="w3-table-all w3-card-4">
             <?php
-            //Header retorno plan antiga
+            //Header retorno plan Nova
             if (isset($itensNova['retornos']) && $itensNova['retornos'] == 1) { ?>
               <tr>
                 <?php
                 for ($i = 0; $i < count($itensNova['cabecalhos']); $i++) {
-                  echo '<th>' . $itensNova["cabecalhos"][$i] . '</th>';
+                  if ($i != 9) {
+                    echo '<th>' . $itensNova["cabecalhos"][$i] . '</th>';
+                  }
                 }
                 ?>
               </tr>
               <tr>
                 <?php
                 for ($i = 0; $i < count($itensNova['cabecalhos']); $i++) {
-                  echo '<td>' . $itensNova["values"][0][$i] . '</td>';
+                  if ($i != 9) {
+                    echo '<td>' . $itensNova["values"][0][$i] . '</td>';
+                  }
                 }
                 ?>
               </tr>
@@ -211,7 +215,9 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
               <tr>
                 <?php
                 for ($i = 0; $i < count($itensNova['cabecalhos']); $i++) {
-                  echo '<th>' . $itensNova["cabecalhos"][$i] . '</th>';
+                  if ($i != 9) {
+                    echo '<th>' . $itensNova["cabecalhos"][$i] . '</th>';
+                  }
                 }
                 ?>
               </tr>
@@ -220,7 +226,9 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
               for ($x = 0; $x < count($itensNova['valueRanges']); $x++) {
                 echo "<tr>";
                 for ($i = 0; $i < count($itensNova['cabecalhos']); $i++) {
-                  echo '<td>' . $itensNova['valueRanges'][$x]['values'][0][$i] . '</td>';
+                  if ($i != 9) {
+                    echo '<td>' . $itensNova['valueRanges'][$x]['values'][0][$i] . '</td>';
+                  }
                 }
                 echo "</tr>";
               }
@@ -322,7 +330,7 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
 
   ?>
 </body>
-<script src=./js/script.js?vs=4></script>
+<script src=./js/script.js?vs=5></script>
 
 
 </html>

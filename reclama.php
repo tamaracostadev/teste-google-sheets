@@ -17,8 +17,6 @@ $reclama = new Autentica;
 $auth = $reclama->auth();
 
 
-//$insert = $reclama->insertProblem(0, $auth, $_POST['acao']);
-
 if ($_POST['check'] == 1) {
   $reclama->getPostRec($_SESSION['login'], $_SESSION['origem'], $_POST['ticket'], $_POST['pedido'], $_POST['cpf'], $_POST['nome'], $_POST['obs'], $_POST['Reclama'], $_POST['area']);
   $reclama->setSession();
