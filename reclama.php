@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/autentica.php';
+require __DIR__ . '/autentica.class.php';
 
 /* Regras a aplicar
 - Se não for precisar colocar a reclamação na planilha, simplesmente insere a reclamação na aba atendimento

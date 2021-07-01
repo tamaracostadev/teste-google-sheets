@@ -144,36 +144,36 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['origem'])) {
         </div>
       </form>
     </div>
-    <!-TAB CONSULTA-->
-      <div id="consulta" class="rec" style="display:none">
-        <div class="w3-container w3-blue-gray">
+    <!--TAB CONSULTA-->
+    <div id="consulta" class="rec" style="display:none">
+      <div class="w3-container w3-blue-gray">
 
-          <h2>Atendimento - Consulta retorno</h2>
-        </div>
-
-        <?php  ?>
-        <form class="w3-container" method="POST" action="index.php" name="consform" id="consform">
-          <div class="w3-section">
-            <label class="w3-text-black"><b>Consultar por</b></label><br>
-            <input class="w3-check" type="radio" name="consulta" value="cpf" checked>
-            <label>CPF</label>
-            <input class="w3-check w3-margin-left" type="radio" name="consulta" value="ticket">
-            <label>Ticket</label>
-            <input class="w3-check w3-margin-left" type="radio" name="consulta" value="pedido">
-            <label>Pedido</label>
-
-          </div>
-          <div class="w3-section">
-            <label class="w3-text-black" for='num'><b>Número</b></label>
-            <input class="w3-input w3-border " name="num" id="num" type="text" placeholder="Número">
-
-            <input class='hid' name="check" value="2">
-            <br>
-            <button class="w3-btn w3-blue-gray" type="submit" id="btn-ver">Enviar</button>
-            <br>
-          </div>
-        </form>
+        <h2>Atendimento - Consulta retorno</h2>
       </div>
+
+      <?php  ?>
+      <form class="w3-container" method="POST" action="index.php" name="consform" id="consform">
+        <div class="w3-section">
+          <label class="w3-text-black"><b>Consultar por</b></label><br>
+          <input class="w3-check" type="radio" name="consulta" value="cpf" checked>
+          <label>CPF</label>
+          <input class="w3-check w3-margin-left" type="radio" name="consulta" value="ticket">
+          <label>Ticket</label>
+          <input class="w3-check w3-margin-left" type="radio" name="consulta" value="pedido">
+          <label>Pedido</label>
+
+        </div>
+        <div class="w3-section">
+          <label class="w3-text-black" for='num'><b>Número</b></label>
+          <input class="w3-input w3-border " name="num" id="num" type="text" placeholder="Número">
+
+          <input class='hid' name="check" value="2">
+          <br>
+          <button class="w3-btn w3-blue-gray" type="submit" id="btn-ver">Enviar</button>
+          <br>
+        </div>
+      </form>
+    </div>
 
   </div>
 

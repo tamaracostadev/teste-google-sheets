@@ -1,6 +1,6 @@
 <?php
 ini_set('error_reporting', E_ERROR);
-require __DIR__ . '/autentica.php';
+require __DIR__ . '/autentica.class.php';
 
 //consultar na planilha antiga - Tudo certo - retornando ok
 $consulta = new Autentica;
